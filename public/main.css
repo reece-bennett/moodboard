@@ -4,9 +4,21 @@
 
 h1 {
   font-weight: 200;
-  font-size: 5rem;
+  font-size: 32px;
   text-align: center;
   margin: 1rem 0;
+}
+
+/* Fluid font size */
+@media (min-width: 400px) and (max-width: 800px) {
+  h1 {
+    font-size: calc(32px + (64 - 32) * ((100vw - 400px) / (800 - 400)));
+  }
+}
+@media (min-width: 800px) {
+  h1 {
+    font-size: 64px;
+  }
 }
 
 #grid {
