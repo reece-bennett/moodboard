@@ -3,28 +3,39 @@
 <head>
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Moodboard</title>
+  <title>Gallery</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" type="text/css" media="screen" href="bootstrap-reboot.css"/>
+  <link rel="stylesheet" type="text/css" media="screen" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.2.1/css/bootstrap-reboot.css"/>
+  <link rel="stylesheet" type="text/css" media="screen" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"/>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="stylesheet" type="text/css" media="screen" href="main.css"/>
 </head>
 <body>
-  
+
   <div id="container">
-    <h1 id="board-title">Moodboard Title</h1>
+    <h1>Moodboard</h1>
     <div id="grid"></div>
+    <i class="material-icons fab">add</i>
   </div>
 
-  <div id="new-button">+</div>
+  <div id="lightbox" class="lightbox" hidden>
+    <a></a>
+    <img>
+  </div>
 
-  <div id="modal-background" hidden>
-    <div id="modal">
-      <a class="url" target="_blank">Title</a>
+  <div id="newForm" class="lightbox" hidden>
+    <form>
       <img>
-    </div>
+      <label for="imageURL">Image URL:</label>
+      <input type="url" name="imageURL" id="imageURL" value="https://source.unsplash.com/UmM372f0yuU" autocomplete="off" required>
+      <label for="sourceURL">Source URL:</label>
+      <input type="url" name="sourceURL" id="sourceURL" value="https://unsplash.com/photos/UmM372f0yuU" autocomplete="off" required>
+      <button type="submit">Submit</button>
+    </form>
   </div>
-
+  
   <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.js"></script>
+  <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.js"></script>
   <script src="main.js"></script>
 </body>
 </html>
