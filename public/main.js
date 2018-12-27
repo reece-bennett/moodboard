@@ -16,10 +16,13 @@ const lightbox = document.getElementById("lightbox");
 const lightboxLink = document.querySelector("#lightbox > a");
 const lightboxImage = document.querySelector("#lightbox > img");
 
-const form = document.querySelector("#newForm > form");
-const formImage = document.querySelector("#newForm img");
+const form = document.querySelector("#addForm > form");
+const formImage = document.querySelector("#addForm img");
 const formImageUrl = document.querySelector("#imageURL");
 const formSourceUrl = document.querySelector("#sourceURL");
+
+const addButton = document.querySelector("#addButton");
+const addForm = document.querySelector("#addForm");
 
 lightbox.addEventListener("click", (ev) => {
   if (ev.target != lightbox) return;
@@ -28,31 +31,34 @@ lightbox.addEventListener("click", (ev) => {
 
 form.addEventListener("submit", (ev) => {
   ev.preventDefault();
-  const data = {
+  const body = {
     imageURL: formImageUrl.value,
     sourceURL: formSourceUrl.value
   }
-  console.log(data);
+  console.log(body);
 
   // Send data to API
   fetch(APIURL, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data)
+    body: JSON.stringify(body)
   })
   .then(res => res.json())
-  .then(json => console.log(json));
-  // get new item in response, add into data and refresh page
+  .then(json => {
+    data.push(json.data);
+    addItem(data.length - 1);
+    imgLoaded();
+    addForm.hidden = true;
+  });
 }, false);
 
 formImageUrl.addEventListener("focusout", (ev) => {
   formImage.src = formImageUrl.value;
 }, false)
 
-imagesLoaded(grid).on("progress", function() {
-  masonry.layout();
-  console.log("progress");
-});
+addButton.addEventListener("click", (ev) => {
+  addForm.hidden = false;
+}, false);
 
 let imageIndex = -1;
 
@@ -73,12 +79,15 @@ function closeLightbox() {
 }
 
 function changeLightboxImage(index) {
+  console.log(`Changing to image #${index}`);
+
   const sourceURL = data[index].sourceURL;
   const imageURL = data[index].imageURL;
 
   imageIndex = index;
 
-  lightboxLink.innerText = sourceURL;
+  const regexp = /^https?\:\/\/(?:www\.)?([^\/:?#]+)(?:[\/:?#]|$)/i;
+  lightboxLink.innerText = sourceURL.match(regexp)[1];
   lightboxLink.href = sourceURL;
   
   lightboxImage.src = imageURL;
@@ -88,6 +97,7 @@ function nextImage() {
   if (lightbox.hidden) return;
 
   imageIndex++;
+  imageIndex %= data.length;
   changeLightboxImage(imageIndex);
 }
 
@@ -95,6 +105,7 @@ function previousImage() {
   if (lightbox.hidden) return;
 
   imageIndex--;
+  if (imageIndex < 0) imageIndex += data.length;
   changeLightboxImage(imageIndex);
 }
 
@@ -112,20 +123,33 @@ document.addEventListener("keydown", (ev) => {
   }
 }, false);
 
+function addItem(index) {
+  const gridItem = document.createElement("div");
+  gridItem.classList.add("grid-item");
+  gridItem.addEventListener("click", () => openLightbox(index), false);
+  
+  const gridImg = document.createElement("img");
+  gridImg.src = data[index].imageURL;
+  gridItem.append(gridImg);
+  
+  grid.append(gridItem);
+
+  masonry.appended(gridItem);
+}
+
+function imgLoaded() {
+  imagesLoaded(grid).on("progress", (instance, image) => {
+    masonry.layout();
+  });
+}
+
 // Get the data list from the API
 fetch(APIURL)
 .then(response => response.json())
 .then(json => {
   data = json;
   for (let i = 0; i < data.length; i++) {
-    const gridItem = document.createElement("div");
-    gridItem.classList.add("grid-item");
-    gridItem.addEventListener("click", () => openLightbox(i), false);
-    
-    const gridImg = document.createElement("img");
-    gridImg.src = data[i].imageURL;
-    gridItem.append(gridImg);
-    
-    grid.append(gridItem);
+    addItem(i);
   }
+  imgLoaded();
 });
