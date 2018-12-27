@@ -48,16 +48,12 @@ form.addEventListener("submit", (ev) => {
     data.push(json.data);
     addItem(data.length - 1);
     imgLoaded();
-    addForm.hidden = true;
+    closeForm();
   });
 }, false);
 
 formImageUrl.addEventListener("focusout", (ev) => {
   formImage.src = formImageUrl.value;
-}, false)
-
-addButton.addEventListener("click", (ev) => {
-  addForm.hidden = false;
 }, false);
 
 let imageIndex = -1;
@@ -153,3 +149,13 @@ fetch(APIURL)
   }
   imgLoaded();
 });
+
+function openForm() {
+  addForm.hidden = false;
+  container.classList.add("blur");
+}
+
+function closeForm() {
+  addForm.hidden = true;
+  container.classList.remove("blur");
+}

@@ -106,3 +106,13 @@ h1 {
 #addForm label {
   margin-bottom: 0.5rem;
 }
+
+.closeButton {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+
+  color: white;
+  font-size: 2rem;
+  cursor: pointer;
+}

@@ -15,7 +15,7 @@
   <div id="container">
     <h1>Minecraft Insparation</h1>
     <div id="grid"></div>
-    <i id="addButton" class="material-icons fab">add</i>
+    <i id="addButton" class="material-icons fab" onclick="openForm()">add</i>
   </div>
 
   <div id="lightbox" class="lightbox" hidden>
@@ -24,6 +24,7 @@
   </div>
 
   <div id="addForm" class="lightbox" hidden>
+    <i class="material-icons closeButton" onclick="closeForm()">close</i>
     <form>
       <img>
       <label for="imageURL">Image URL:</label>
