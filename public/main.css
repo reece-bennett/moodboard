@@ -2,6 +2,16 @@
   filter: blur(4px);
 }
 
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+}
+
 h1 {
   font-weight: 200;
   font-size: 32px;
@@ -107,7 +117,7 @@ h1 {
   margin-bottom: 0.5rem;
 }
 
-.closeButton {
+.topRightButton {
   position: fixed;
   top: 1rem;
   right: 1rem;
@@ -115,4 +125,24 @@ h1 {
   color: white;
   font-size: 2rem;
   cursor: pointer;
+}
+
+#editPopup {
+  position: fixed;
+  top: 4rem;
+  right: 1rem;
+
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+
+  background: white;
+}
+
+#editPopup > label > span {
+  display: block;
+}
+
+#editPopup > label:last-of-type {
+  margin-bottom: 1rem;
 }

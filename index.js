@@ -1,6 +1,7 @@
 // index.js
 
 const bodyParser = require("body-parser");
+const cors = require("cors");
 const express = require("express");
 const mongoose = require("mongoose");
 
@@ -8,6 +9,7 @@ const mongoose = require("mongoose");
 require('dotenv').config();
 
 // Connect to mongoose
+console.log("Making connection to the database...");
 mongoose.connect(`mongodb+srv://${process.env.USER}:${process.env.PASSWORD}@${process.env.URL}`)
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error:"));
@@ -17,12 +19,7 @@ const port = process.env.PORT || 8080;
 
 app.use(express.static("public"));
 
-// Enable CORS https://enable-cors.org/server_expressjs.html
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
+app.use(cors());
 
 // Configue bodyparser so we can handle post requests
 app.use(bodyParser.urlencoded({

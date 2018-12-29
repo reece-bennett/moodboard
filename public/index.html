@@ -15,16 +15,31 @@
   <div id="container">
     <h1>Minecraft Insparation</h1>
     <div id="grid"></div>
-    <i id="addButton" class="material-icons fab" onclick="openForm()">add</i>
+    <i id="addButton" class="material-icons fab noselect" onclick="openForm()">add</i>
   </div>
 
   <div id="lightbox" class="lightbox" hidden>
+    <i class="material-icons topRightButton noselect" onclick="toggleEditBox()">edit</i>
+    <form id="editPopup" hidden>
+      <label>
+        <span>Image URL:</span>
+        <input type="url" id="editImageURL"autocomplete="off" required>
+      </label>
+      <label>
+        <span>Source URL:</span>
+        <input type="url" id="editSourceURL"autocomplete="off" required>
+      </label>
+      <div>
+        <button type="submit">Update</button>
+        <button type="button" onclick="deleteImage(currentIndex)">Delete</button>
+      </div>
+    </form>
     <a target="_blank"></a>
     <img>
   </div>
 
   <div id="addForm" class="lightbox" hidden>
-    <i class="material-icons closeButton" onclick="closeForm()">close</i>
+    <i class="material-icons topRightButton noselect" onclick="closeForm()">close</i>
     <form>
       <img>
       <label for="imageURL">Image URL:</label>
