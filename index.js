@@ -9,10 +9,11 @@ const mongoose = require("mongoose");
 require('dotenv').config();
 
 // Connect to mongoose
-console.log("Making connection to the database...");
-mongoose.connect(`mongodb+srv://${process.env.USER}:${process.env.PASSWORD}@${process.env.URL}`)
+const dbURL = `mongodb+srv://${process.env.DBUSER}:${process.env.DBPASSWORD}@${process.env.DBURL}`;
+console.log(`Making connection to the database at '${dbURL}'...`);
+mongoose.connect(dbURL);
 const db = mongoose.connection;
-db.on("error", console.error.bind(console, "connection error:"));
+db.on("error", console.error.bind(console, "Connection error:"));
 
 const app = express();
 const port = process.env.PORT || 8080;
