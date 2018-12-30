@@ -1,4 +1,4 @@
-const APIURL = "http://localhost:8080/api";
+const APIURL = `${window.location.origin}/api`;
 let data = [];
 
 const container = document.getElementById("container");
