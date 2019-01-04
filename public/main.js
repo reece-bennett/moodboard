@@ -37,7 +37,6 @@ form.addEventListener("submit", (ev) => {
     imageURL: formImageUrl.value,
     sourceURL: formSourceUrl.value
   }
-  console.log(body);
 
   // Send data to API
   fetch(APIURL, {
@@ -48,7 +47,10 @@ form.addEventListener("submit", (ev) => {
   .then(res => res.json())
   .then(json => {
     data.push(json.data);
-    addItem(data.length - 1);
+    data.sort((a, b) => new Date(b.created) - new Date(a.created));
+    const gridItem = createItem(0);
+    grid.insertBefore(gridItem, grid.firstChild);
+    masonry.prepended(gridItem);
     imgLoaded();
     closeForm();
   });
@@ -134,7 +136,7 @@ function _openLightbox(event) {
   openLightbox([...grid.children].indexOf(event.target.parentElement));
 }
 
-function addItem(index) {
+function createItem(index) {
   const gridItem = document.createElement("div");
   gridItem.classList.add("grid-item");
   gridItem.addEventListener("click", _openLightbox, false);
@@ -142,10 +144,8 @@ function addItem(index) {
   const gridImg = document.createElement("img");
   gridImg.src = data[index].imageURL;
   gridItem.append(gridImg);
-  
-  grid.append(gridItem);
 
-  masonry.appended(gridItem);
+  return gridItem;
 }
 
 function removeItem(index) {
@@ -164,8 +164,11 @@ fetch(APIURL)
 .then(response => response.json())
 .then(json => {
   data = json;
+  data.sort((a, b) => new Date(b.created) - new Date(a.created));
   for (let i = 0; i < data.length; i++) {
-    addItem(i);
+    const gridItem = createItem(i);
+    grid.append(gridItem);
+    masonry.appended(gridItem);
   }
   imgLoaded();
 });
@@ -241,6 +244,7 @@ function deleteImage(index) {
   .then(res => {
     data.splice(currentIndex, 1);
     removeItem(currentIndex);
-    previousImage();
+    // previousImage();
+    changeLightboxImage(currentIndex);
   });
 } 

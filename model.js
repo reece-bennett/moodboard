@@ -10,7 +10,13 @@ const schema = mongoose.Schema({
   sourceURL: {
     type: String,
     required: true
-  }
+  },
+  created: Date
+});
+
+schema.pre("save", function(next) {
+  this.created = new Date();
+  next();
 });
 
 module.exports = mongoose.model("item", schema);
