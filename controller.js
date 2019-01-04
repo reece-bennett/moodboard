@@ -16,16 +16,17 @@ exports.create = (req, res) => {
   item.imageURL = req.body.imageURL;
   item.sourceURL = req.body.sourceURL;
   
-  item.save(err => {
-    if (err) {
-      res.json(err);
-    } else {
+  item.save()
+    .then(doc => {
       res.json({
         message: "Item created",
-        data: item
+        data: doc
       });
-    }
-  });
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).end();
+    });
 };
 
 exports.update = (req, res) => {
