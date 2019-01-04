@@ -11,7 +11,7 @@ require('dotenv').config();
 // Connect to mongoose
 const dbURL = `mongodb+srv://${process.env.DBUSER}:${process.env.DBPASSWORD}@${process.env.DBURL}`;
 console.log(`Making connection to the database at '${dbURL}'...`);
-mongoose.connect(dbURL);
+mongoose.connect(dbURL, { useNewUrlParser: true });
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "Connection error:"));
 
