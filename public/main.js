@@ -244,7 +244,9 @@ function deleteImage(index) {
   .then(res => {
     data.splice(currentIndex, 1);
     removeItem(currentIndex);
-    // previousImage();
+    if (currentIndex >= data.length) {
+      currentIndex--;
+    }
     changeLightboxImage(currentIndex);
   });
 } 
