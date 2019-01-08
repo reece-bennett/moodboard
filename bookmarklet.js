@@ -1,10 +1,12 @@
 javascript:
+
 /*
-URL scraping from:
+URL scraping adapted from:
 https://github.com/voussoir/else/blob/master/Javascript/opendir_image.js
 */
 
-const IMAGE_TYPES = ["\\.jpg", "\\.jpeg", "\\.jpg", "\\.bmp", "\\.tiff", "\\.tif", "\\.bmp", "\\.gif", "\\.png", "reddituploads\.com", "\\.webp", "drscdn\\.500px\\.org\\/photo"].join("|");
+var API_URL = "http://localhost:8080/api";
+var IMAGE_TYPES = ["\\.jpg", "\\.jpeg", "\\.jpg", "\\.bmp", "\\.tiff", "\\.tif", "\\.bmp", "\\.gif", "\\.png", "reddituploads\.com", "\\.webp", "drscdn\\.500px\\.org\\/photo"].join("|");
 var seen_urls = new Set();
 
 function normalize_url(url) {
@@ -15,7 +17,7 @@ function normalize_url(url) {
   url = url.replace("http:", protocol);
   url = url.replace("https:", protocol);
 
-  console.log(url);
+  /* console.log(url); */
   url = url.replace("imgur.com/gallery/", "imgur.com/a/");
 
   if (url.indexOf("vidble") >= 0) {
@@ -72,14 +74,6 @@ function normalize_url(url) {
     url = protocol + "//i.imgur.com/" + image_id + extension;
   }
 
-  else if (url.indexOf("gfycat.com") >= 0) {
-    var gfy_id = url.split("/");
-    gfy_id = gfy_id[gfy_id.length - 1];
-    gfy_id = gfy_id.split(".")[0];
-    if (gfy_id.length > 0) {
-      url = get_gfycat_video(gfy_id);
-    }
-  }
   return [url];
 }
 
@@ -94,7 +88,7 @@ function get_all_urls() {
       if (url === undefined) { continue; }
       if (seen_urls.has(url)) { continue; }
 
-      console.log(url);
+      /* console.log(url); */
 
       if (url.indexOf("thumbs.redditmedia") != -1) { console.log("Rejecting reddit thumb"); continue; }
       if (url.indexOf("pixel.reddit") != -1 || url.indexOf("reddit.com/static/pixel") != -1) { console.log("Rejecting reddit pixel"); continue }
@@ -129,10 +123,256 @@ function get_all_urls() {
   return urls;
 }
 
+
+
+/*
+  DOM Manipulation
+*/
+
+var gallery = document.createElement("div");
+var formContainer = document.createElement("div");
+var styleTag = document.createElement("style");
+
+function setupGallery() {
+  gallery.id = "mb_gallery";
+  document.body.append(gallery);
+
+  const closeButton = document.createElement("div");
+  closeButton.id = "mb_closeButton";
+  closeButton.innerText = "X";
+  closeButton.onclick = cleanup;
+  gallery.append(closeButton);
+}
+
+function setupForm() {
+  formContainer.id = "mb_form";
+  formContainer.hidden = true;
+  document.body.append(formContainer);
+  
+  const form = document.createElement("form");
+  form.onsubmit = submitForm;
+  formContainer.append(form);
+
+  const imageLabel = document.createElement("label");
+  const imageSpan = document.createElement("span");
+  imageSpan.innerText = "Image URL:";
+  imageLabel.append(imageSpan);
+  const imageInput = document.createElement("input");
+  imageInput.id = "imageInput";
+  imageInput.type = "url";
+  imageInput.autocomplete = "off";
+  imageLabel.append(imageInput);
+  form.append(imageLabel);
+
+  const sourceLabel = document.createElement("label");
+  const sourceSpan = document.createElement("span");
+  sourceSpan.innerText = "Source URL:";
+  sourceLabel.append(sourceSpan);
+  const sourceInput = document.createElement("input");
+  sourceInput.id = "sourceInput";
+  sourceInput.type = "url";
+  sourceInput.autocomplete = "off";
+  sourceLabel.append(sourceInput);
+  form.append(sourceLabel);
+
+  const submitButton = document.createElement("button");
+  submitButton.type = "submit";
+  submitButton.innerText = "Submit";
+  form.append(submitButton);
+
+  const cancelButton = document.createElement("button");
+  cancelButton.innerText = "Cancel";
+  cancelButton.type = "button";
+  cancelButton.onclick = hideForm;
+  form.append(cancelButton);
+}
+
+function submitForm(event) {
+  console.log(event);
+  event.preventDefault();
+  fetch(API_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      imageURL: document.querySelector("#imageInput").value,
+      sourceURL: document.querySelector("#sourceInput").value
+    })
+  })
+  .then(res => {
+    if (res.ok) {
+      cleanup();
+    }
+  });
+}
+
+function showForm(event) {
+  formContainer.hidden = false;
+  document.querySelector("#imageInput").value = event.target.src;
+  document.querySelector("#sourceInput").value = window.location.href;
+}
+
+function hideForm() {
+  formContainer.hidden = true;
+}
+
+function injectCSS() {
+  styleTag.innerText = `
+    [hidden] {
+      display: none !important;
+    }
+
+    body {
+      overflow: hidden;
+    }
+
+    #mb_gallery {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.75);
+      padding: 20px;
+      box-sizing: border-box;
+      z-index: 100;
+      font-family: sans-serif;
+      overflow: auto;
+    }
+
+    #mb_gallery a {
+      cursor: pointer;
+      display: inline-block;
+      height: 200px;
+      position: relative;
+      margin: 0 10px 10px 0;
+    }
+
+    #mb_gallery img {
+      height: 200px;
+    }
+
+    #mb_gallery span {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      color: white;
+      background: black;
+      opacity: 0.8;
+    }
+
+    #mb_closeButton {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    #mb_form {
+      z-index: 101;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+    }
+
+    #mb_form form {
+      color: #212529;
+      background: #f8f9fa;
+      max-width: 1000px;
+      width: 100%;
+      pointer-events: initial;
+      padding: 16px;
+    }
+
+    #mb_form label { 
+      display: flex;
+      margin-bottom: 8px;
+    }
+
+    #mb_form span {
+      width: 6rem;
+      line-height: 2.1875;
+    }
+
+    #mb_form input {
+      flex: 1 1 auto;
+      border: 1px solid #ced4da;
+      padding: 0.375rem 0.75rem;
+      border-radius: 0.25rem;
+    }
+
+    #mb_form button {
+      text-align: center;
+      vertical-align: middle;
+      user-select: none;
+      border: 1px solid #6c757d;
+      padding: 0.375rem 0.75rem;
+      border-radius: 0.25rem;
+      background: #6c757d;
+      color: #fff;
+      margin-right: 0.5rem;
+    }
+
+    #mb_form button[type=submit] {
+      background: #007bff;
+      border: 1px solid #007bff;
+    }
+  `;
+  document.head.append(styleTag);
+}
+
+function cleanup() {
+  gallery.remove();
+  formContainer.remove();
+  styleTag.remove();
+}
+
+function createImage(url) {
+  const container = document.createElement("a");
+  container.onclick = showForm;
+
+  const image = document.createElement("img");
+  image.src = url;
+  container.append(image);
+
+  const sizeLabel = document.createElement("span");
+  sizeLabel.innerText = `${image.naturalWidth}x${image.naturalHeight}`;
+  container.append(sizeLabel);
+
+  return container;
+}
+
+var images = [];
+
 function main() {
   const all_urls = get_all_urls();
   const imageURLs = all_urls.filter(url => url.split("?")[0].match(IMAGE_TYPES));
-  console.log(imageURLs);
+
+  setupGallery();
+  setupForm();
+  injectCSS();
+
+  for (let url of imageURLs) {
+    images.push(createImage(url));
+  }
+
+  images.sort((a, b) => {
+    const aImg = a.children[0];
+    const bImg = b.children[0];
+    return (bImg.naturalWidth + bImg.naturalHeight) - (aImg.naturalWidth + aImg.naturalHeight);
+  });
+
+  for (let img of images) {
+    gallery.append(img);
+  }
 }
 
 main();
