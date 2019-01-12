@@ -245,6 +245,12 @@ function injectCSS() {
       height: 200px;
       position: relative;
       margin: 0 10px 10px 0;
+      border: 1px solid #555;
+      transition: border 0.2s;
+    }
+
+    #mb_gallery a:hover {
+      border-color: #aaa;
     }
 
     #mb_gallery img {
@@ -342,15 +348,20 @@ function createImage(url) {
   const image = document.createElement("img");
   image.src = url;
   container.append(image);
+  
+  const promise = new Promise(resolve => {
+    image.onload = () => resolve(container);
+  });
 
   const sizeLabel = document.createElement("span");
-  sizeLabel.innerText = `${image.naturalWidth}x${image.naturalHeight}`;
   container.append(sizeLabel);
 
-  return container;
+  return promise;
 }
 
-var images = [];
+function totalSize(container) {
+  return container.children[0].naturalWidth + container.children[0].naturalHeight;
+}
 
 function main() {
   const all_urls = get_all_urls();
@@ -361,17 +372,16 @@ function main() {
   injectCSS();
 
   for (let url of imageURLs) {
-    images.push(createImage(url));
-  }
-
-  images.sort((a, b) => {
-    const aImg = a.children[0];
-    const bImg = b.children[0];
-    return (bImg.naturalWidth + bImg.naturalHeight) - (aImg.naturalWidth + aImg.naturalHeight);
-  });
-
-  for (let img of images) {
-    gallery.append(img);
+    createImage(url).then(container => {
+      const containers = document.querySelectorAll("#mb_gallery a"); 
+      container.children[1].innerText = `${container.children[0].naturalWidth}x${container.children[0].naturalHeight}`;
+      if (containers.length == 0) {
+        gallery.append(container);
+      } else {
+        const before = Array.prototype.slice.call(containers).find(el => totalSize(el) < totalSize(container));
+        gallery.insertBefore(container, before);
+      }
+    });
   }
 }
 
