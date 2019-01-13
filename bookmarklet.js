@@ -7,7 +7,6 @@ https://github.com/voussoir/else/blob/master/Javascript/opendir_image.js
 
 var API_URL = "http://localhost:8080/api";
 var IMAGE_TYPES = ["\\.jpg", "\\.jpeg", "\\.jpg", "\\.bmp", "\\.tiff", "\\.tif", "\\.bmp", "\\.gif", "\\.png", "reddituploads\.com", "\\.webp", "drscdn\\.500px\\.org\\/photo"].join("|");
-var seen_urls = new Set();
 
 function normalize_url(url) {
   var protocol = window.location.protocol;
@@ -77,7 +76,7 @@ function normalize_url(url) {
   return [url];
 }
 
-function get_all_urls() {
+function get_all_urls(seen_urls) {
   console.log("Collecting urls");
   var urls = [];
 
@@ -128,10 +127,6 @@ function get_all_urls() {
 /*
   DOM Manipulation
 */
-
-var gallery = document.createElement("div");
-var formContainer = document.createElement("div");
-var styleTag = document.createElement("style");
 
 function setupGallery() {
   gallery.id = "mb_gallery";
@@ -364,7 +359,8 @@ function totalSize(container) {
 }
 
 function main() {
-  const all_urls = get_all_urls();
+  const seen_urls = new Set();
+  const all_urls = get_all_urls(seen_urls);
   const imageURLs = all_urls.filter(url => url.split("?")[0].match(IMAGE_TYPES));
 
   setupGallery();
@@ -385,4 +381,10 @@ function main() {
   }
 }
 
-main();
+if (document.querySelector("#mb_gallery") == undefined) {
+  var gallery = document.createElement("div");
+  var formContainer = document.createElement("div");
+  var styleTag = document.createElement("style");
+
+  main();
+}
