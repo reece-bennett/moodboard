@@ -386,6 +386,12 @@ function main() {
   setupForm();
   injectCSS();
 
+  document.addEventListener("keydown", event => {
+    if (event.key == "Escape") {
+      cleanup();
+    }
+  });
+
   for (let url of imageURLs) {
     createImage(url).then(container => {
       const containers = document.querySelectorAll("#mb_gallery a"); 
