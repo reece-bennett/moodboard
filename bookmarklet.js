@@ -148,6 +148,16 @@ function setupForm() {
   form.onsubmit = submitForm;
   formContainer.append(form);
 
+  const titleLabel = document.createElement("label");
+  const titleSpan = document.createElement("span");
+  titleSpan.innerText = "Title:";
+  titleLabel.append(titleSpan);
+  const titleInput = document.createElement("input");
+  titleInput.id = "titleInput";
+  titleInput.autocomplete = "off";
+  titleLabel.append(titleInput);
+  form.append(titleLabel);
+
   const imageLabel = document.createElement("label");
   const imageSpan = document.createElement("span");
   imageSpan.innerText = "Image URL:";
@@ -183,12 +193,12 @@ function setupForm() {
 }
 
 function submitForm(event) {
-  console.log(event);
   event.preventDefault();
   fetch(API_URL, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
+      title: document.querySelector("#titleInput").value,
       imageURL: document.querySelector("#imageInput").value,
       sourceURL: document.querySelector("#sourceInput").value
     })
@@ -202,6 +212,7 @@ function submitForm(event) {
 
 function showForm(event) {
   formContainer.hidden = false;
+  document.querySelector("#titleInput").value = document.title;
   document.querySelector("#imageInput").value = event.target.src;
   document.querySelector("#sourceInput").value = window.location.href;
 }
