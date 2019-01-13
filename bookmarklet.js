@@ -215,10 +215,14 @@ function showForm(event) {
   document.querySelector("#titleInput").value = document.title;
   document.querySelector("#imageInput").value = event.target.src;
   document.querySelector("#sourceInput").value = window.location.href;
+  if (selected) selected.classList.remove("selected");
+  selected = event.target.parentElement;
+  selected.classList.add("selected");
 }
 
 function hideForm() {
   formContainer.hidden = true;
+  selected.classList.remove("selected");
 }
 
 function injectCSS() {
@@ -257,6 +261,10 @@ function injectCSS() {
 
     #mb_gallery a:hover {
       border-color: #aaa;
+    }
+
+    #mb_gallery a.selected {
+      border-color: #fff;
     }
 
     #mb_gallery img {
@@ -396,6 +404,7 @@ if (document.querySelector("#mb_gallery") == undefined) {
   var gallery = document.createElement("div");
   var formContainer = document.createElement("div");
   var styleTag = document.createElement("style");
+  var selected;
 
   main();
 }
