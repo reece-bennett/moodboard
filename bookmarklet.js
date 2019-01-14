@@ -244,7 +244,7 @@ function injectCSS() {
       background: rgba(0, 0, 0, 0.75);
       padding: 20px;
       box-sizing: border-box;
-      z-index: 100;
+      z-index: 100;  
       font-family: sans-serif;
       overflow: auto;
     }
@@ -413,4 +413,6 @@ if (document.querySelector("#mb_gallery") == undefined) {
   var selected;
 
   main();
+} else {
+  cleanup();
 }
