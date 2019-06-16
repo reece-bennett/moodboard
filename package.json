@@ -2,26 +2,29 @@
   "name": "moodboard",
   "version": "0.0.1",
   "description": "A moodboard application to save images with links to the source",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "nodemon -w server.js server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PhyscoKillerMonkey/moodboard.git"
   },
   "keywords": [],
   "author": "Reece Bennett",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PhyscoKillerMonkey/moodboard/issues"
+  },
+  "homepage": "https://github.com/PhyscoKillerMonkey/moodboard#readme",
   "dependencies": {
-    "body-parser": "^1.18.3",
-    "cors": "^2.8.5",
-    "dotenv": "^6.2.0",
-    "express": "^4.16.4",
-    "mongoose": "^5.4.0"
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1"
   },
   "devDependencies": {
-    "nodemon": "^1.18.9"
-  },
-  "nodemonConfig": {
-    "ignore": [
-      "public/*"
-    ]
+    "eslint": "^5.16.0",
+    "eslint-plugin-react": "^7.13.0",
+    "nodemon": "^1.19.1"
   }
 }
