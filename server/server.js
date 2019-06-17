@@ -6,7 +6,7 @@ const { OAuth2Client } = require("google-auth-library");
 const app = express();
 const port = process.env.PORT || 8080;
 
-app.use(express.static(path.join(__dirname, "client", "build")));
+app.use(express.static(path.resolve(__dirname, "..", "build")));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
