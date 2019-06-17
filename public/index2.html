@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" type="text/css" href="bootstrap-reboot.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" type="text/css" href="main2.css">
+</head>
+<body>
+  
+  <div id="container">
+    <header>
+      <a><i class="material-icons">list</i></a>
+      <h1>Minecraft</h1>
+      <a><i class="material-icons">add</i></a>
+      <a><i class="material-icons">settings</i></a>
+    </header>
+    
+    <main>
+      <div id="grid"></div>
+    </main>
+  </div>
+
+  <div id="lightbox" hidden>
+    <div id="lightbox-container"><img></div>
+    <div id="lightbox-sidebar">
+      <a id="source-button" class="button" target="_blank">
+        <i class="material-icons">open_in_new</i>
+        <span>Source</span>
+      </a>
+      <a id="image-button" class="button" target="_blank">
+        <i class="material-icons">open_in_new</i>
+        <span>Image</span>
+      </a>
+      <label>
+        <span>Source URL</span>
+        <input id="source-field" type="url" autocomplete="off">
+      </label>
+      <label>
+        <span>Image URL</span>
+        <input id="image-field" type="url" autocomplete="off">
+      </label>
+    </div>
+  </div>
+  
+  <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.js"></script>
+  <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.js"></script>
+  <script src="header.js"></script>
+  <script src="moodboard.js"></script>
+</body>
+</html>

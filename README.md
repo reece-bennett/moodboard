@@ -8,6 +8,8 @@ DBUSER=user
 DBPASSWORD=password
 ```
 
+If you still get connection problems after entering the details, check the IP whitelist on the DB instance.
+
 ## Todo
 
 - [ ] Image number when in full screen mode (x out of y)

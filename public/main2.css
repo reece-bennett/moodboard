@@ -1,0 +1,155 @@
+body {
+  background: #f5f7fa;
+}
+
+body.lightbox-open {
+  overflow: hidden;
+}
+
+body.lightbox-open #container {
+  filter: blur(4px);
+}
+
+header {
+  position: fixed;
+  top: 0;
+
+  display: flex;
+  align-items: center;
+
+  width: 100%;
+  height: 64px;
+  
+  background: #ffffff;
+  border-bottom: 1px solid #e0e5eb;
+  z-index: 10;
+  transition: transform 0.5s;
+}
+
+header > h1 {
+  flex: 1 1 auto;
+  font-weight: 400;
+  font-size: 26px;
+  margin: 0;
+  margin-left: 24px;
+}
+
+header > a {
+  width: 64px;
+  height: 100%;
+  text-align: center;
+  border-left: 1px solid #e0e5eb;
+}
+
+header > a:first-child {
+  border: none;
+  border-right: 1px solid #e0e5eb;
+}
+
+header > a > i.material-icons {
+  line-height: 64px;
+}
+
+header.hide {
+  transform: translateY(-100%);
+}
+
+main {
+  height: 200vh;
+  padding-top: 76px;
+}
+
+#grid {
+  margin: auto;
+}
+
+.grid-item { 
+  width: 300px;
+  margin-bottom: 5px;
+  cursor: zoom-in;
+}
+
+.grid-item > img {
+  width: 100%;
+}
+
+#lightbox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 20;
+  cursor: zoom-out;
+}
+
+#lightbox-container {
+  height: 100%;
+  flex: 1;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#lightbox img {
+  max-width: 90%;
+  max-height: 90%;
+  cursor: auto;
+}
+
+#lightbox-sidebar {
+  height: 100%;
+  width: 300px;
+  padding: 24px;
+  background: #1e2427;
+  cursor: auto;
+}
+
+#lightbox-sidebar > a.button {
+  background: none;
+  border: 1px solid #545e64;
+  color: white;
+  width: 47%;
+  margin-bottom: 24px;
+  padding: 4px;
+  display: inline-block;
+  text-align: center;
+}
+
+#lightbox-sidebar > a.button:hover {
+  text-decoration: none;
+}
+
+#image-button {
+  float: right;
+}
+
+#lightbox-sidebar > a.button > i {
+  font-size: 16px;
+  vertical-align: middle;
+  padding-bottom: 3px;
+}
+
+#lightbox-sidebar label {
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+#lightbox-sidebar > label > span {
+  display: block;
+  color: white;
+  font-weight: bold;
+}
+
+#lightbox-sidebar input[type="url"] {
+  width: 100%;
+  color: #c2c2c2;
+  background: none;
+  border: none;
+  border-bottom: 1px dotted #545e64;
+}
