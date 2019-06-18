@@ -1,12 +1,25 @@
+// Load config variables from .env
+require("dotenv").config();
+
 const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
 const { OAuth2Client } = require("google-auth-library");
+const mongoose = require("mongoose");
+const apiRoutes = require("./apiRoutes");
+
+// Connect to mongoose
+const dbURL = `mongodb+srv://${process.env.DBUSER}:${process.env.DBPASSWORD}@${process.env.DBURL}`;
+console.log(`Making connection to the database at '${dbURL}'...`);
+mongoose.connect(dbURL, { useNewUrlParser: true });
+const db = mongoose.connection;
+db.on("error", console.error.bind(console, "Connection error:"));
 
 const app = express();
 const port = process.env.PORT || 8080;
 
 app.use(express.static(path.resolve(__dirname, "..", "build")));
+app.use("/img", express.static(path.resolve(__dirname, "..", "imageStore")));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -16,7 +29,6 @@ const authClient = new OAuth2Client(CLIENT_ID);
 
 app.use(async (req, res, next) => {
   const authorization = req.header("Authorization");
-
   if (authorization) {
     try {
       const idToken = authorization.split("Bearer ")[1];
@@ -38,24 +50,12 @@ app.use(async (req, res, next) => {
       console.error(error);
     }
   }
-
   console.log(`${req.method} ${req.path} User:${req.user}`);
   next();
 });
 
-function loggedIn(req, res, next) {
-  if (!req.user) {
-    return res.status(401).json({ message: "Unauthorized" });
-  }
-  next();
-}
+app.use("/images", apiRoutes);
 
-app.get("/api", (req, res) => {
-  res.json({ message: "Hello world!" });
+db.once("open", () => {
+  app.listen(port, () => console.log(`Listening on port ${port}`));
 });
-
-app.get("/secret", loggedIn, (req, res) => {
-  res.json({ message: `Secret page for ${req.user}` });
-});
-
-app.listen(port, () => console.log(`Listening on port ${port}`));
