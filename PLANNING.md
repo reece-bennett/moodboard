@@ -4,9 +4,9 @@
 - [ ] Client-side gallery and lightbox
 - [x] Mongoose schema and model
 - [ ] Input validation for POST/PUT
-- [ ] Basic GET/POST/PUT/DELETE routes
-  - [ ] Generate the width/height from the downloaded image
-  - [ ] Validate user on PUT/DELETE routes
+- [x] Basic GET/POST/PUT/DELETE routes
+  - [x] Generate the width/height from the downloaded image
+  - [x] Validate user on PUT/DELETE routes
 - [ ] Support for uploading image as multipart data
 
 ## Fields
