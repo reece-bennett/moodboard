@@ -127,7 +127,11 @@ router.delete("/:id", loggedIn, async (req, res) => {
     }
 
     const result = await Image.deleteOne({ _id: req.params.id });
-    res.send(result);
+    if (result.ok) {
+      res.json(image);
+    } else {
+      throw new Error("Delete was not OK");
+    }
 
   } catch (error) {
     console.error(error);

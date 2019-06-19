@@ -8,6 +8,7 @@
   - [x] Generate the width/height from the downloaded image
   - [x] Validate user on PUT/DELETE routes
 - [ ] Support for uploading image as multipart data
+- [ ] Delete image on disk when DELETE is executed (delete in the request handler, or run a periodic task to check for deleted images?)
 
 ## Fields
 
