@@ -6,7 +6,7 @@ const imageSchema = new mongoose.Schema(
     width: { type: Number, required: true },
     height: { type: Number, required: true },
     sourceUrl: { type: String, required: true },
-    author: { type: Number, required: true },
+    author: { type: String, required: true },
     description: { type: String, default: "" }
   },
   { timestamps: true }
