@@ -1,7 +1,8 @@
 ## To-Do
 
-- [ ] Chrome extension
+- [x] Chrome extension
 - [ ] Client-side gallery and lightbox
+  - [ ] Form for adding new links
 - [x] Mongoose schema and model
 - [ ] Input validation for POST/PUT
 - [x] Basic GET/POST/PUT/DELETE routes
@@ -9,6 +10,9 @@
   - [x] Validate user on PUT/DELETE routes
 - [ ] Support for uploading image as multipart data
 - [ ] Delete image on disk when DELETE is executed (delete in the request handler, or run a periodic task to check for deleted images?)
+- [ ] Image tags, sorting and viewing by tag
+- [ ] Add settings page for chrome extension, get OAuth ID and API URL from here
+- [ ] Icon for favicon and Chrome extension
 
 ## Fields
 

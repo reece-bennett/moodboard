@@ -23,6 +23,12 @@
       "env": {
         "jest": true
       }
+    },
+    {
+      "files": "chromeExtension/*.js",
+      "env": {
+        "webextensions": true
+      }
     }
   ],
   "plugins": ["react"],

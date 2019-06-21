@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="modal.css" />
+  </head>
+
+  <body>
+    <div id="modal">
+      <form>
+        <h2>Save Image</h2>
+        <label>
+          <span>Description:</span>
+          <input name="description" type="text" autocomplete="off" required />
+        </label>
+        <label>
+          <span>Image URL:</span>
+          <input name="imageUrl" type="url" autocomplete="off" required />
+        </label>
+        <label>
+          <span>Source URL:</span>
+          <input name="sourceUrl" type="url" autocomplete="off" required />
+        </label>
+        <div>
+          <input type="submit" />
+          <input type="button" id="closeButton" value="Close" />
+        </div>
+      </form>
+      <div id="modal-image">
+        <img />
+      </div>
+    </div>
+    <script src="modal.js"></script>
+  </body>
+</html>

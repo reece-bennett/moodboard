@@ -1,0 +1,22 @@
+{
+  "name": "Moodboard Companion",
+  "version": "0.0.1",
+  "description": "Save images from the web to a moodboard.",
+  "permissions": ["activeTab", "contextMenus", "identity", "storage"],
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["content-script.js"]
+    }
+  ],
+  "web_accessible_resources": ["modal.html", "modal.css"],
+  "oauth2": {
+    "client_id": "551119125116-6300399vra3kiv0cgud65ag9rgbqbt0o.apps.googleusercontent.com",
+    "scopes": ["openid", "email", "profile"]
+  },
+  "manifest_version": 2
+}

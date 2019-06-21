@@ -24,7 +24,7 @@ app.use("/img", express.static(path.resolve(__dirname, "..", "imageStore")));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-const CLIENT_ID = "551119125116-dh8arpi5njabjnqpamp10evsqk0ct87f.apps.googleusercontent.com";
+const CLIENT_ID = "551119125116-6300399vra3kiv0cgud65ag9rgbqbt0o.apps.googleusercontent.com";
 const authClient = new OAuth2Client(CLIENT_ID);
 
 app.use(async (req, res, next) => {
