@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import Gallery from "react-photo-gallery";
 import Carousel, { Modal, ModalGateway } from "react-images";
 // import Modal from "react-modal";
+import "./Board.css";
 
 export default class Board extends React.Component {
   state = {
@@ -63,7 +64,9 @@ export default class Board extends React.Component {
       lightboxImages.push({
         src: el.imageUrl,
         caption: el.description,
-        alt: el.description
+        alt: el.description,
+        hostname: (new URL(el.sourceUrl)).hostname,
+        sourceUrl: el.sourceUrl
       });
     });
 
@@ -91,12 +94,21 @@ export default class Board extends React.Component {
           {lightboxIsOpen ? (
             <Modal onClose={this.closeLightbox}>
               <Carousel
+                components={{
+                  FooterCaption: ({ currentView }) => {
+                    const { caption, hostname, sourceUrl } = currentView;
+                    return (
+                      <span className="imageCaption">
+                        <span>{caption}</span>
+                        <a href={sourceUrl}>{hostname}</a>
+                      </span>
+                    );
+                  }
+                }}
                 currentIndex={currentIndex}
                 hideControlsWhenIdle={false}
                 styles={{
-                  view: base => {
-                    return { ...base, maxHeight: 400 };
-                  }
+                  footer: base => ({ ...base, alignItems: "flex-end" })
                 }}
                 views={lightboxImages}
               />

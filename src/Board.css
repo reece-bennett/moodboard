@@ -1,0 +1,9 @@
+.imageCaption {
+  display: flex;
+  flex-direction: column;
+}
+
+.imageCaption a {
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: underline;
+}
