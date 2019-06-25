@@ -1,19 +1,13 @@
 import React from "react";
 import { GoogleLogin, GoogleLogout } from "react-google-login";
 import "./App.css";
+import Board from "./Board";
 
 export default class App extends React.Component {
   state = {
-    data: null,
-    secret: null,
+    data: [],
     user: null
   };
-
-  componentDidMount() {
-    this.callBackend("/api")
-      .then(res => this.setState({ data: res.message }))
-      .catch(err => console.error(err));
-  }
 
   callBackend = async url => {
     const { user } = this.state;
@@ -25,6 +19,18 @@ export default class App extends React.Component {
       throw Error(body.message);
     }
     return body;
+  };
+
+  getImages = async () => {
+    const { user } = this.state;
+    const headers = user ? { Authorization: `Bearer ${user.idToken}` } : {};
+    const response = await fetch("/images", { headers: headers });
+
+    if (response.ok) {
+      return await response.json();
+    } else {
+      return response.body;
+    }
   };
 
   onSignIn = googleUser => {
@@ -39,8 +45,8 @@ export default class App extends React.Component {
     this.setState({ user });
     console.log(`${user.givenName} ${user.familyName} (ID:${user.id}) signed in`);
 
-    this.callBackend("/secret")
-      .then(res => this.setState({ secret: res.message }))
+    this.callBackend("/images")
+      .then(data => this.setState({ data }))
       .catch(err => console.error(err));
   };
 
@@ -55,7 +61,7 @@ export default class App extends React.Component {
       <GoogleLogout onLogoutSuccess={this.onSignOut} buttonText="Sign out" />
     ) : (
       <GoogleLogin
-        clientId="551119125116-dh8arpi5njabjnqpamp10evsqk0ct87f.apps.googleusercontent.com"
+        clientId="551119125116-6300399vra3kiv0cgud65ag9rgbqbt0o.apps.googleusercontent.com"
         onSuccess={this.onSignIn}
         onFailure={err => console.error(`Sign in failed: ${err.error}`)}
         buttonText="Sign in"
@@ -67,8 +73,7 @@ export default class App extends React.Component {
       <div className="App">
         <h1>Moodboard</h1>
         {signInButton}
-        <p>Data: {this.state.data}</p>
-        <p>Secret data: {this.state.secret}</p>
+        <Board images={this.state.data} />
       </div>
     );
   }

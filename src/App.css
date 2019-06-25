@@ -1,3 +1,9 @@
 .App {
   text-align: center;
 }
+
+.imageJson {
+  text-align: left;
+  max-width: min-content;
+  margin: 1rem auto;
+}

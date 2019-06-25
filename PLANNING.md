@@ -13,6 +13,7 @@
 - [ ] Image tags, sorting and viewing by tag
 - [ ] Add settings page for chrome extension, get OAuth ID and API URL from here
 - [ ] Icon for favicon and Chrome extension
+- [ ] Show the saved image with link to the board after saving with the Chrome extension
 
 ## Fields
 
