@@ -1,51 +1,54 @@
 import React from "react";
 import PropTypes from "prop-types";
 import Gallery from "react-photo-gallery";
-import Carousel, { Modal, ModalGateway } from "react-images";
-// import Modal from "react-modal";
+import Carousel, { Modal as Lightbox, ModalGateway } from "react-images";
+import Modal from "react-modal";
+
+import EditForm from "./EditForm";
+import { Close, Edit, FullscreenEnter, FullscreenExit } from "./icon";
 import "./Board.css";
+
+Modal.setAppElement("#root");
 
 export default class Board extends React.Component {
   state = {
-    currentImage: 0,
+    currentIndex: 0,
+    editIsOpen: false,
     lightboxIsOpen: false
   };
 
   openLightbox = (event, obj) => {
     this.setState({
-      currentImage: obj.index,
+      currentIndex: obj.index,
       lightboxIsOpen: true
     });
   };
 
   closeLightbox = () => {
     this.setState({
-      currentImage: 0,
+      currentIndex: 0,
       lightboxIsOpen: false
     });
   };
 
   gotoImage = index => {
     this.setState({
-      currentImage: index
+      currentIndex: index
     });
   };
 
-  gotoNext = () => {
-    this.setstate(state => {
-      return { currentImage: state.currentImage + 1 };
-    });
+  openEdit = () => {
+    console.log(this.state.currentIndex);
+    this.setState({ editIsOpen: true });
   };
 
-  gotoPrevious = () => {
-    this.setstate(state => {
-      return { currentImage: state.currentImage - 1 };
-    });
+  closeEdit = () => {
+    this.setState({ editIsOpen: false });
   };
 
   render() {
     const { images } = this.props;
-    const { currentImage: currentIndex, lightboxIsOpen } = this.state;
+    const { currentIndex, editIsOpen, lightboxIsOpen } = this.state;
 
     if (images.length === 0) {
       return null;
@@ -65,7 +68,7 @@ export default class Board extends React.Component {
         src: el.imageUrl,
         caption: el.description,
         alt: el.description,
-        hostname: (new URL(el.sourceUrl)).hostname,
+        hostname: new URL(el.sourceUrl).hostname,
         sourceUrl: el.sourceUrl
       });
     });
@@ -73,26 +76,9 @@ export default class Board extends React.Component {
     return (
       <div>
         <Gallery photos={galleryImages} onClick={this.openLightbox} />
-        {/* <Lightbox
-          images={lightboxImages}
-          backdropClosesModal={true}
-          currentImage={this.state.currentImage}
-          isOpen={this.state.lightboxIsOpen}
-          onClickNext={this.gotoNext}
-          onClickPrev={this.gotoPrevious}
-          onClickThumbnail={this.gotoImage}
-          onClose={this.closeLightbox}
-          width={1920}
-          customControls={[
-            <a key={1}>www.reddit.com</a>,
-            <span key={2}> - </span>,
-            <button key={3} onClick={this.openEdit}>edit</button>,
-            <span key={4} style={{flexGrow: 1}}></span>
-          ]}
-        /> */}
         <ModalGateway>
           {lightboxIsOpen ? (
-            <Modal onClose={this.closeLightbox}>
+            <Lightbox onClose={this.closeLightbox}>
               <Carousel
                 components={{
                   FooterCaption: ({ currentView }) => {
@@ -103,6 +89,26 @@ export default class Board extends React.Component {
                         <a href={sourceUrl}>{hostname}</a>
                       </span>
                     );
+                  },
+                  Header: ({ modalProps }) => {
+                    const { isFullscreen, onClose, toggleFullscreen } = modalProps;
+
+                    return (
+                      <div className="header">
+                        <span />
+                        <span>
+                          <button className="headerButton" onClick={this.openEdit} type="button">
+                            <Edit />
+                          </button>
+                          <button className="headerButton" onClick={toggleFullscreen} type="button">
+                            {isFullscreen ? <FullscreenExit /> : <FullscreenEnter />}
+                          </button>
+                          <button className="headerButton" onClick={onClose} type="button">
+                            <Close />
+                          </button>
+                        </span>
+                      </div>
+                    );
                   }
                 }}
                 currentIndex={currentIndex}
@@ -110,11 +116,38 @@ export default class Board extends React.Component {
                 styles={{
                   footer: base => ({ ...base, alignItems: "flex-end" })
                 }}
+                trackProps={{
+                  onViewChange: this.gotoImage
+                }}
                 views={lightboxImages}
               />
-            </Modal>
+            </Lightbox>
           ) : null}
         </ModalGateway>
+        <Modal
+          isOpen={editIsOpen}
+          onRequestClose={this.closeEdit}
+          style={{
+            overlay: {
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              zIndex: 10
+            },
+            content: {
+              position: "initial",
+              width: "100%",
+              maxWidth: "500px"
+            }
+          }}
+        >
+          <EditForm
+            image={images[currentIndex]}
+            onCancel={() => this.setState({ editIsOpen: false })}
+            updateImage={() => console.log("Update image")}
+            deleteImage={() => console.log("Delete image")}
+          />
+        </Modal>
       </div>
     );
   }

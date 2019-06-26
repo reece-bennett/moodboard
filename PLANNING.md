@@ -1,8 +1,19 @@
 ## To-Do
 
-- [x] Chrome extension
-- [ ] Client-side gallery and lightbox
-  - [ ] Form for adding new links
+**Chrome Extension**
+
+- [ ] Settings page, get OAuth ID and API URL from here
+- [ ] Icon for favicon and Chrome extension
+- [ ] Show the saved image with link to the board after saving with the Chrome extension
+
+**Client**
+
+- [ ] Form for adding new links
+- [x] Edit button in lightbox, might need to re-make the header as seems like there is no easy way to just add another control alongside the other buttons
+- [ ] BUG: Carousel looses keyboard focus after closing the edit modal
+
+**Server**
+
 - [x] Mongoose schema and model
 - [ ] Input validation for POST/PUT
 - [x] Basic GET/POST/PUT/DELETE routes
@@ -11,9 +22,7 @@
 - [ ] Support for uploading image as multipart data
 - [ ] Delete image on disk when DELETE is executed (delete in the request handler, or run a periodic task to check for deleted images?)
 - [ ] Image tags, sorting and viewing by tag
-- [ ] Add settings page for chrome extension, get OAuth ID and API URL from here
-- [ ] Icon for favicon and Chrome extension
-- [ ] Show the saved image with link to the board after saving with the Chrome extension
+- [ ] Each image should have the URL of the original source image to allow easy re-download
 
 ## Fields
 

@@ -7,3 +7,36 @@
   color: rgba(255, 255, 255, 0.7);
   text-decoration: underline;
 }
+
+.header {
+  align-items: center;
+  background: linear-gradient(rgba(0, 0, 0, 0.33), rgba(0, 0, 0, 0));
+  display: flex;
+  flex: 0 0 auto;
+  justify-content: space-between;
+  padding: 10px 10px 20px 10px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
+}
+
+.headerButton {
+  align-items: center;
+  background: 0;
+  border: 0;
+  color: rgba(255, 255, 255, 0.75);
+  cursor: pointer;
+  display: inline-flex;
+  height: 44px;
+  justify-content: center;
+  outline: 0;
+  padding: 0;
+  position: relative;
+  width: 44px;
+}
+
+.headerButton:hover {
+  color: white;
+}

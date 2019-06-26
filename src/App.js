@@ -1,7 +1,7 @@
 import React from "react";
 import { GoogleLogin, GoogleLogout } from "react-google-login";
-import "./App.css";
 import Board from "./Board";
+import "./App.css";
 
 export default class App extends React.Component {
   state = {
