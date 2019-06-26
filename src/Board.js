@@ -38,12 +38,18 @@ export default class Board extends React.Component {
   };
 
   openEdit = () => {
-    console.log(this.state.currentIndex);
     this.setState({ editIsOpen: true });
   };
 
   closeEdit = () => {
     this.setState({ editIsOpen: false });
+  };
+
+  updateImage = (id, changes) => {
+    const { onUpdate } = this.props;
+    onUpdate(id, changes)
+      .then(() => this.closeEdit())
+      .catch(err => console.error(err));
   };
 
   render() {
@@ -144,8 +150,8 @@ export default class Board extends React.Component {
           <EditForm
             image={images[currentIndex]}
             onCancel={() => this.setState({ editIsOpen: false })}
-            updateImage={() => console.log("Update image")}
-            deleteImage={() => console.log("Delete image")}
+            onUpdate={this.updateImage}
+            onDelete={() => console.log("Delete image")}
           />
         </Modal>
       </div>
@@ -154,5 +160,6 @@ export default class Board extends React.Component {
 }
 
 Board.propTypes = {
-  images: PropTypes.array.isRequired
+  images: PropTypes.array.isRequired,
+  onUpdate: PropTypes.func.isRequired
 };

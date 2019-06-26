@@ -9,28 +9,23 @@ export default class App extends React.Component {
     user: null
   };
 
-  callBackend = async url => {
+  callBackend = async (method, url, payload) => {
     const { user } = this.state;
-    const headers = user ? { Authorization: `Bearer ${user.idToken}` } : {};
-    const response = await fetch(url, { headers: headers });
+    const headers = {
+      ...(user && { Authorization: `Bearer ${user.idToken}` }),
+      ...(payload && { "Content-Type": "application/json" })
+    };
+    const response = await fetch(url, {
+      ...(payload && { body: JSON.stringify(payload) }),
+      headers: headers,
+      method
+    });
     const body = await response.json();
 
     if (response.status !== 200) {
       throw Error(body.message);
     }
     return body;
-  };
-
-  getImages = async () => {
-    const { user } = this.state;
-    const headers = user ? { Authorization: `Bearer ${user.idToken}` } : {};
-    const response = await fetch("/images", { headers: headers });
-
-    if (response.ok) {
-      return await response.json();
-    } else {
-      return response.body;
-    }
   };
 
   onSignIn = googleUser => {
@@ -45,7 +40,7 @@ export default class App extends React.Component {
     this.setState({ user });
     console.log(`${user.givenName} ${user.familyName} (ID:${user.id}) signed in`);
 
-    this.callBackend("/images")
+    this.callBackend("GET", "/images", null)
       .then(data => this.setState({ data }))
       .catch(err => console.error(err));
   };
@@ -54,6 +49,20 @@ export default class App extends React.Component {
     const { user } = this.state;
     console.log(`${user.givenName} ${user.familyName} (ID:${user.id}) signed out`);
     this.setState({ user: null });
+  };
+
+  updateImage = (id, changes) => {
+    console.log(`Updating ${id}`);
+    return new Promise((resolve, reject) => {
+      this.callBackend("PUT", `/images/${id}`, changes)
+        .then(newImage => {
+          this.setState(state => ({
+            data: state.data.map(el => el._id === id ? { ...el, ...newImage } : el)
+          }));
+          resolve();
+        })
+        .catch(err => reject(err));
+    });
   };
 
   render() {
@@ -73,7 +82,7 @@ export default class App extends React.Component {
       <div className="App">
         <h1>Moodboard</h1>
         {signInButton}
-        <Board images={this.state.data} />
+        <Board images={this.state.data} onUpdate={this.updateImage} />
       </div>
     );
   }

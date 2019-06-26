@@ -13,6 +13,8 @@ export default class EditForm extends React.Component {
   };
 
   handleSubmit = event => {
+    const { image, onUpdate } = this.props;
+
     event.preventDefault();
 
     let changes = {};
@@ -21,12 +23,14 @@ export default class EditForm extends React.Component {
         changes[key] = value;
       }
     }
-
-    console.log(changes);
+    
+    if (Object.keys(changes).length !== 0) {
+      onUpdate(image._id, changes);
+    }
   };
 
   render() {
-    const { onCancel, deleteImage } = this.props;
+    const { onCancel, onDelete } = this.props;
     const { description, sourceUrl } = this.state;
 
     return (
@@ -56,8 +60,10 @@ export default class EditForm extends React.Component {
         </label>
         <div>
           <button type="submit">Submit</button>
-          <button type="button" onClick={onCancel}>Close</button>
-          <button type="button" onClick={deleteImage} style={{ float: "right" }}>
+          <button type="button" onClick={onCancel}>
+            Close
+          </button>
+          <button type="button" onClick={onDelete} style={{ float: "right" }}>
             Delete
           </button>
         </div>
@@ -69,6 +75,6 @@ export default class EditForm extends React.Component {
 EditForm.propTypes = {
   image: PropTypes.object.isRequired,
   onCancel: PropTypes.func.isRequired,
-  updateImage: PropTypes.func.isRequired,
-  deleteImage: PropTypes.func.isRequired
+  onUpdate: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired
 };
