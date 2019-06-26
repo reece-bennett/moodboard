@@ -96,7 +96,7 @@ chrome.runtime.onInstalled.addListener(() => {
           action: "updateFields",
           data: payload
         }),
-      50
+      250
     );
     return;
   });
