@@ -1,5 +1,6 @@
 // Load config variables from .env
 require("dotenv").config();
+const { DBUSER, DBPASSWORD, DBURL, CLIENT_ID, PORT } = process.env;
 
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -9,14 +10,14 @@ const mongoose = require("mongoose");
 const apiRoutes = require("./apiRoutes");
 
 // Connect to mongoose
-const dbURL = `mongodb+srv://${process.env.DBUSER}:${process.env.DBPASSWORD}@${process.env.DBURL}`;
-console.log(`Making connection to the database at '${dbURL}'...`);
-mongoose.connect(dbURL, { useNewUrlParser: true });
+const dbUrl = `mongodb+srv://${DBUSER}:${DBPASSWORD}@${DBURL}`;
+console.log(`Making connection to the database at '${dbUrl}'...`);
+mongoose.connect(dbUrl, { useNewUrlParser: true });
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "Connection error:"));
 
 const app = express();
-const port = process.env.PORT || 8080;
+const port = PORT || 8080;
 
 app.use(express.static(path.resolve(__dirname, "..", "build")));
 app.use("/img", express.static(path.resolve(__dirname, "..", "imageStore")));
@@ -24,7 +25,6 @@ app.use("/img", express.static(path.resolve(__dirname, "..", "imageStore")));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-const CLIENT_ID = "551119125116-6300399vra3kiv0cgud65ag9rgbqbt0o.apps.googleusercontent.com";
 const authClient = new OAuth2Client(CLIENT_ID);
 
 app.use(async (req, res, next) => {

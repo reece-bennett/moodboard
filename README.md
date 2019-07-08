@@ -1,11 +1,14 @@
 # Moodboard
 
-A `.env` file must be present, containing details for a MongoDB instance:
+A `.env` file must be present, containing details for a MongoDB instance and Google OAuth client:
 
 ```env
 DBURL=example.com
 DBUSER=user
 DBPASSWORD=password
+CLIENT_ID=abc123.apps.googleusercontent.com
 ```
 
-If you still get connection problems after entering the details, check the IP whitelist on the DB instance.
+The port can optionally be specified: `PORT=80`. If omitted port `8080` will be used.
+
+If there are connection errors, check the IP whitelist on the DB instance.
