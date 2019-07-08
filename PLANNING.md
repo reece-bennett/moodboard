@@ -5,6 +5,8 @@
 - [ ] Settings page, get OAuth ID and API URL from here
 - [ ] Icon for favicon and Chrome extension
 - [ ] Show the saved image with link to the board after saving with the Chrome extension
+- [ ] Show upload progress when saving image
+- [ ] Show errors during the upload process and allow the user to re-try
 
 **Client**
 
@@ -23,11 +25,12 @@
 - [ ] Support for uploading image as multipart data
 - [ ] Delete image on disk when DELETE is executed (delete in the request handler, or run a periodic task to check for deleted images?)
 - [ ] Image tags, sorting and viewing by tag
-- [ ] Each image should have the URL of the original source image to allow easy re-download
+- [x] Each image should have the URL of the original source image to allow easy re-download
 
 ## Fields
 
 `imageUrl` string (required)
+`originalUrl` string (required)
 `sourceUrl` string (required)
 `description` string (required)
 `width` number (generated from image)

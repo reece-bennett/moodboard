@@ -67,6 +67,7 @@ router.post("/", loggedIn, async (req, res) => {
     const { localUrl, dimensions } = await downloadImage(imageUrl);
     const image = new Image({
       imageUrl: localUrl,
+      originalUrl: imageUrl,
       sourceUrl,
       description,
       width: dimensions.width,
@@ -100,6 +101,7 @@ router.put("/:id", loggedIn, async (req, res) => {
 
     if (fields.imageUrl) {
       const { localUrl, dimensions } = await downloadImage(fields.imageUrl);
+      fields.originalUrl = fields.imageUrl;
       fields.imageUrl = localUrl;
       fields.width = dimensions.width;
       fields.height = dimensions.height;
