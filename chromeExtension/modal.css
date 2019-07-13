@@ -6,6 +6,8 @@ html {
   box-sizing: inherit;
 }
 
+*[hidden] { display: none !important; }
+
 body {
   background-color: rgba(0, 0, 0, 0.7);
   font-family: sans-serif;
@@ -18,52 +20,99 @@ body {
   transform: translate(-50%, -50%);
   width: 100%;
   max-width: 600px;
+  height: 200px;
   background: white;
   padding: 1rem;
+}
+
+#modal>div {
+  height: 100%;
+}
+
+#modal-form {
   display: flex;
   flex-direction: row;
+  align-items: center;
 }
 
-#modal form {
+form {
   flex: 1 1 auto;
-  margin-right: 1rem;
   display: flex;
   flex-direction: column;
+  margin-right: 1rem;
 }
 
-#modal h2 {
-  margin: 0 0 1rem 0;
+h2 {
+  margin: 0;
+  margin-bottom: 1rem;
 }
 
-#modal label {
+label {
   display: flex;
   align-items: center;
   margin-bottom: 0.5rem;
 }
 
-#modal label:last-of-type {
+label:last-of-type {
   margin-bottom: 1rem;
 }
 
-#modal span {
-  width: 92px;
-  padding-right: 8px;
+label>span {
+  width: 100px;
+  padding-right: 0.5rem;
   text-align: right;
 }
 
-#modal label>input {
+label>input {
   flex: 1 1 auto;
   padding: 0.1rem;
 }
 
 #modal-image {
+/*   background: red; */
   height: 163px;
   max-width: 220px;
   display: flex;
 }
 
-#modal-image img {
+#modal-image>img {
   max-height: 100%;
   max-width: 100%;
   object-fit: contain;
+}
+
+
+#modal-progress {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#spinner {
+  width: 32px;
+	height: 32px;
+  margin: 1rem 0;
+	clear: both;
+  border: 4px rgba(0, 0, 0, 0.25) solid;
+	border-top: 4px rgba(0, 0, 0, 1) solid;
+	border-radius: 50%;
+	animation: spinnerRotation .6s infinite linear;
+}
+
+@keyframes spinnerRotation {
+	from { transform: rotate(0deg); }
+	to { transform: rotate(359deg); }
+}
+
+
+#modal-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#modal-error>span {
+  margin-bottom: 1rem;
 }

@@ -53,6 +53,8 @@ function getIdToken(interactive, callback) {
   });
 }
 
+const formData = {};
+
 chrome.runtime.onInstalled.addListener(() => {
   chrome.contextMenus.create({
     id: "saveImage",
@@ -61,6 +63,8 @@ chrome.runtime.onInstalled.addListener(() => {
   });
 
   chrome.contextMenus.onClicked.addListener((info, tab) => {
+    console.log("Context menu clicked");
+
     let image = info.srcUrl;
     let source = info.pageUrl;
     let title = tab.title;
@@ -81,24 +85,16 @@ chrome.runtime.onInstalled.addListener(() => {
       image = `https://i.redd.it/${match}`;
     }
 
-    console.log(`Saving image:\nImageUrl: ${image}\nSourceUrl: ${source}\nDescription: ${title}`);
+    console.log(`ImageUrl: ${image}\nSourceUrl: ${source}\nDescription: ${title}`);
 
-    const payload = {
+    const fields = {
       imageUrl: image,
       sourceUrl: source,
       description: title
     };
 
     chrome.tabs.sendMessage(tab.id, { action: "openModal" });
-    setTimeout(
-      () =>
-        chrome.tabs.sendMessage(tab.id, {
-          action: "updateFields",
-          data: payload
-        }),
-      250
-    );
-    return;
+    formData[tab.id] = fields;
   });
 });
 
@@ -132,22 +128,31 @@ function sendRequest(idToken, payload, tabId) {
         console.log("Image saved!");
         chrome.tabs.sendMessage(tabId, { action: "closeModal" });
         return response.json();
-        // Maybe get the URL of the image and present to the user here?
+        // TODO: Get the URL of the image and present to the user
       } else {
-        throw Error(response.json());
+        throw new Error(response.json());
       }
     })
     .then(json => console.log(json))
-    .catch(json => console.error(json));
+    .catch(error => {
+      chrome.tabs.sendMessage(tabId, { action: "saveError" });
+      console.error(error);
+    });
 }
 
 // eslint-disable-next-line no-unused-vars
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  console.log(sender, request);
   switch (request.action) {
     case "closeModal":
-      // Mirror back the close modal message to the tab that asked for it
+      // Mirror back to the content-script
       chrome.tabs.sendMessage(sender.tab.id, { action: "closeModal" });
       break;
+
+    case "updateFieldsRequest":
+      sendResponse({ data: formData[sender.tab.id] });
+      break;
+
     case "submit":
       saveImage(request.data, sender.tab.id);
       break;

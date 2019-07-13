@@ -30,7 +30,7 @@ function closeModal() {
 
 // eslint-disable-next-line no-unused-vars
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  console.log(request);
+  console.log(sender, request);
   switch (request.action) {
     case "openModal":
       openModal();

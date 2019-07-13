@@ -7,27 +7,40 @@
 
   <body>
     <div id="modal">
-      <form>
-        <h2>Save Image</h2>
-        <label>
-          <span>Description:</span>
-          <input name="description" type="text" autocomplete="off" required />
-        </label>
-        <label>
-          <span>Image URL:</span>
-          <input name="imageUrl" type="url" autocomplete="off" required />
-        </label>
-        <label>
-          <span>Source URL:</span>
-          <input name="sourceUrl" type="url" autocomplete="off" required />
-        </label>
-        <div>
-          <input type="submit" />
-          <input type="button" id="closeButton" value="Close" />
+      <div id="modal-form" hidden>
+        <form>
+          <h2>Save Image</h2>
+          <label>
+            <span>Description:</span>
+            <input name="description" type="text" autocomplete="off" required />
+          </label>
+          <label>
+            <span>Image URL:</span>
+            <input name="imageUrl" type="url" autocomplete="off" required />
+          </label>
+          <label>
+            <span>Source URL:</span>
+            <input name="sourceUrl" type="url" autocomplete="off" required />
+          </label>
+          <div>
+            <input type="submit" />
+            <input type="button" id="closeButton" value="Close" />
+          </div>
+        </form>
+        <div id="modal-image">
+          <img />
         </div>
-      </form>
-      <div id="modal-image">
-        <img />
+      </div>
+      <div id="modal-progress" hidden>
+        <div id="spinner"></div>
+        <span>Saving image</span>
+      </div>
+      <div id="modal-error" hidden>
+        <span>Failed to save the image</span>
+        <div>
+          <button id="retryButton">Retry</button>
+          <button id="cancelButton">Cancel</button>
+        </div>
       </div>
     </div>
     <script src="modal.js"></script>

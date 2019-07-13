@@ -1,36 +1,59 @@
-const form = document.querySelector("form");
-const closeButton = document.querySelector("#closeButton");
-const description = document.querySelector("input[name=description]");
-const imageUrl = document.querySelector("input[name=imageUrl]");
-const sourceUrl = document.querySelector("input[name=sourceUrl]");
-const previewImage = document.querySelector("#modal-image img");
+const $ = document.querySelector.bind(document);
+
+function changeState(state) {
+  console.log(`Change state ${state}`);
+  $("#modal-error").hidden = state !== "modal-error";
+  $("#modal-form").hidden = state !== "modal-form";
+  $("#modal-progress").hidden = state !== "modal-progress";
+}
+
+function submit() {
+  chrome.runtime.sendMessage({
+    action: "submit",
+    data: {
+      description: $("input[name=description]").value,
+      imageUrl: $("input[name=imageUrl]").value,
+      sourceUrl: $("input[name=sourceUrl]").value
+    }
+  });
+  changeState("modal-progress");
+}
 
 // eslint-disable-next-line no-unused-vars
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  console.log(request);
+  console.log(sender, request);
   switch (request.action) {
-    case "updateFields":
-      description.value = request.data.description;
-      imageUrl.value = request.data.imageUrl;
-      sourceUrl.value = request.data.sourceUrl;
-      previewImage.src = request.data.imageUrl;
+    case "saveError":
+      changeState("modal-error");
       break;
   }
 });
 
-closeButton.addEventListener("click", event => {
+$("#closeButton").addEventListener("click", event => {
   event.preventDefault();
   chrome.runtime.sendMessage({ action: "closeModal" });
 });
 
-form.addEventListener("submit", event => {
+$("form").addEventListener("submit", event => {
   event.preventDefault();
-  chrome.runtime.sendMessage({
-    action: "submit",
-    data: {
-      description: description.value,
-      imageUrl: imageUrl.value,
-      sourceUrl: sourceUrl.value
-    }
-  });
+  submit();
+});
+
+$("#cancelButton").addEventListener("click", event => {
+  event.preventDefault();
+  chrome.runtime.sendMessage({ action: "closeModal" });
+});
+
+$("#retryButton").addEventListener("click", event => {
+  event.preventDefault();
+  submit();
+});
+
+// Ask background.js for initial field values
+chrome.runtime.sendMessage({ action: "updateFieldsRequest" }, res => {
+  $("input[name=description]").value = res.data.description;
+  $("input[name=imageUrl]").value = res.data.imageUrl;
+  $("input[name=sourceUrl]").value = res.data.sourceUrl;
+  $("#modal-image img").src = res.data.imageUrl;
+  changeState("modal-form");
 });

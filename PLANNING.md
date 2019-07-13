@@ -5,8 +5,9 @@
 - [ ] Settings page, get OAuth ID and API URL from here
 - [ ] Icon for favicon and Chrome extension
 - [ ] Show the saved image with link to the board after saving with the Chrome extension
-- [ ] Show upload progress when saving image
-- [ ] Show errors during the upload process and allow the user to re-try
+- [x] Show upload progress when saving image
+- [x] Show errors during the upload process and allow the user to re-try
+- [ ] Authenticate with Google doesn't seem to keep user logged in
 
 **Client**
 
@@ -14,6 +15,7 @@
 - [x] Edit button in lightbox, might need to re-make the header as seems like there is no easy way to just add another control alongside the other buttons
 - [ ] BUG: Carousel looses keyboard focus after closing the edit modal
 - [ ] Inform user if they are not authorised to edit an image
+- [ ] Author and date information when hovering over the description in lightbox
 
 **Server**
 
