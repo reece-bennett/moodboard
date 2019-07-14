@@ -5,6 +5,7 @@ function changeState(state) {
   $("#modal-error").hidden = state !== "modal-error";
   $("#modal-form").hidden = state !== "modal-form";
   $("#modal-progress").hidden = state !== "modal-progress";
+  $("#modal-done").hidden = state !== "modal-done";
 }
 
 function submit() {
@@ -25,6 +26,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   switch (request.action) {
     case "saveError":
       changeState("modal-error");
+      break;
+    case "saveSuccess":
+      $("#modal-done>.modal-image>img").src = request.data;
+      changeState("modal-done");
       break;
   }
 });
@@ -49,11 +54,16 @@ $("#retryButton").addEventListener("click", event => {
   submit();
 });
 
+$("#closeButton2").addEventListener("click", event => {
+  event.preventDefault();
+  chrome.runtime.sendMessage({ action: "closeModal" });
+});
+
 // Ask background.js for initial field values
 chrome.runtime.sendMessage({ action: "updateFieldsRequest" }, res => {
   $("input[name=description]").value = res.data.description;
   $("input[name=imageUrl]").value = res.data.imageUrl;
   $("input[name=sourceUrl]").value = res.data.sourceUrl;
-  $("#modal-image img").src = res.data.imageUrl;
+  $("#modal-form>.modal-image>img").src = res.data.imageUrl;
   changeState("modal-form");
 });

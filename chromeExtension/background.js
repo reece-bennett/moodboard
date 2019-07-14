@@ -126,9 +126,9 @@ function sendRequest(idToken, payload, tabId) {
     .then(response => {
       if (response.ok) {
         console.log("Image saved!");
-        chrome.tabs.sendMessage(tabId, { action: "closeModal" });
+        // TODO: Get the URL of the image on the board and use for the "see it" button
+        chrome.tabs.sendMessage(tabId, { action: "saveSuccess", data: payload.imageUrl });
         return response.json();
-        // TODO: Get the URL of the image and present to the user
       } else {
         throw new Error(response.json());
       }

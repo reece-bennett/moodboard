@@ -4,7 +4,7 @@
 
 - [ ] Settings page, get OAuth ID and API URL from here
 - [ ] Icon for favicon and Chrome extension
-- [ ] Show the saved image with link to the board after saving with the Chrome extension
+- [ ] Show the saved image with link to the board after saving with the Chrome extension (waiting on direct links to image in board)
 - [x] Show upload progress when saving image
 - [x] Show errors during the upload process and allow the user to re-try
 - [ ] Authenticate with Google doesn't seem to keep user logged in
@@ -16,6 +16,7 @@
 - [ ] BUG: Carousel looses keyboard focus after closing the edit modal
 - [ ] Inform user if they are not authorised to edit an image
 - [ ] Author and date information when hovering over the description in lightbox
+- [ ] Allow linking to a single image on the board, and change URL as user navigates
 
 **Server**
 

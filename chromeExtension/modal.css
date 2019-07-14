@@ -68,14 +68,13 @@ label>input {
   padding: 0.1rem;
 }
 
-#modal-image {
-/*   background: red; */
+.modal-image {
   height: 163px;
   max-width: 220px;
   display: flex;
 }
 
-#modal-image>img {
+.modal-image>img {
   max-height: 100%;
   max-width: 100%;
   object-fit: contain;
@@ -115,4 +114,19 @@ label>input {
 
 #modal-error>span {
   margin-bottom: 1rem;
+}
+
+
+#modal-done {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+#modal-done>div:first-child {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 1rem;
 }
