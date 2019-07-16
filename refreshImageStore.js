@@ -8,7 +8,7 @@ const directory = "imageStore";
 
 // Get the list of images from the server
 const req = http.get(apiUrl, res => {
-  console.log(`Status: ${res.statusCode} ${res.statusMessage}`);
+  console.log(`GET /images: ${res.statusCode} ${res.statusMessage}`);
 
   let body = "";
   res.on("data", data => {
@@ -17,34 +17,37 @@ const req = http.get(apiUrl, res => {
 
   res.on("end", () => {
     const images = JSON.parse(body);
+    const filenames = [];
 
-    // Clean directory
-    const files = fs.readdirSync(directory);
-    for (const file of files) {
-      fs.unlinkSync(path.join(directory, file));
-      console.log(`Deleted ${file}`);
-    }
-
-    // Download images
     for (const image of images) {
       const { imageUrl, originalUrl } = image;
       const filename = path.join(directory, path.basename(imageUrl));
-      const imageFile = fs.createWriteStream(filename);
-      console.log(`Started downloading ${filename}`);
+      filenames.push(filename);
 
-      https.get(originalUrl, res => {
-        const stream = res.pipe(imageFile);
-        stream.on("finish", () => {
-          console.log(`Saved ${originalUrl} to ${filename}`);
+      // Download missing images
+      if (!fs.existsSync(filename)) {
+        const imageFile = fs.createWriteStream(filename);
+        console.log(`Started downloading ${filename}`);
+        https.get(originalUrl, res => {
+          const stream = res.pipe(imageFile);
+          stream.on("finish", () => {
+            console.log(`Saved ${originalUrl} to ${filename}`);
+          });
+          stream.on("error", err => console.error(err));
         });
-        stream.on("error", err => {
-          console.error(err);
-        });
-      });
+      }
+    }
+
+    // Clean extra files
+    const files = fs.readdirSync(directory);
+    for (const file of files) {
+      const filename = path.join(directory, file);
+      if (!filenames.includes(filename)) {
+        fs.unlinkSync(path.join(directory, file));
+        console.log(`Deleted ${file}`);
+      }
     }
   });
 });
 
-req.on("error", err => {
-  console.error(err);
-});
+req.on("error", err => console.error(err));
