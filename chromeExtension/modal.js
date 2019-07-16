@@ -4,8 +4,10 @@ function changeState(state) {
   console.log(`Change state ${state}`);
   $("#modal-error").hidden = state !== "modal-error";
   $("#modal-form").hidden = state !== "modal-form";
+  if (state === "modal-form") $("input[name=description]").focus();
   $("#modal-progress").hidden = state !== "modal-progress";
   $("#modal-done").hidden = state !== "modal-done";
+  if (state === "modal-done") $("#closeButton2").focus()
 }
 
 function submit() {
