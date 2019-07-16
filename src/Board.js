@@ -45,6 +45,28 @@ export default class Board extends React.Component {
     this.setState({ editIsOpen: false });
   };
 
+  deleteImage = id => {
+    const { onDelete } = this.props;
+    onDelete(id)
+      .then(() => this.closeEdit())
+      .catch(err => console.error(err));
+  };
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    const { currentIndex } = prevState;
+    const { images } = nextProps;
+
+    // If the currentIndex is out of range then reduce it
+    // This happens when deleting the last image on the board
+    if (images.length > 0 && currentIndex >= images.length) {
+      return {
+        currentIndex: images.length - 1
+      };
+    }
+
+    return null;
+  }
+
   updateImage = (id, changes) => {
     const { onUpdate } = this.props;
     onUpdate(id, changes)
@@ -149,9 +171,9 @@ export default class Board extends React.Component {
         >
           <EditForm
             image={images[currentIndex]}
-            onCancel={() => this.setState({ editIsOpen: false })}
+            onCancel={this.closeEdit}
             onUpdate={this.updateImage}
-            onDelete={() => console.log("Delete image")}
+            onDelete={this.deleteImage}
           />
         </Modal>
       </div>
@@ -161,5 +183,6 @@ export default class Board extends React.Component {
 
 Board.propTypes = {
   images: PropTypes.array.isRequired,
+  onDelete: PropTypes.func.isRequired,
   onUpdate: PropTypes.func.isRequired
 };

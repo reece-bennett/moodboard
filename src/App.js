@@ -51,13 +51,27 @@ export default class App extends React.Component {
     this.setState({ user: null });
   };
 
+  deleteImage = id => {
+    console.log(`Deleting ${id}`);
+    return new Promise((resolve, reject) => {
+      this.callBackend("DELETE", `/images/${id}`)
+        .then(() => {
+          this.setState(state => ({
+            data: state.data.filter(el => el._id !== id)
+          }));
+          resolve();
+        })
+        .catch(err => reject(err));
+    });
+  };
+
   updateImage = (id, changes) => {
     console.log(`Updating ${id}`);
     return new Promise((resolve, reject) => {
       this.callBackend("PUT", `/images/${id}`, changes)
         .then(newImage => {
           this.setState(state => ({
-            data: state.data.map(el => el._id === id ? { ...el, ...newImage } : el)
+            data: state.data.map(el => (el._id === id ? { ...el, ...newImage } : el))
           }));
           resolve();
         })
@@ -82,7 +96,7 @@ export default class App extends React.Component {
       <div className="App">
         <h1>Moodboard</h1>
         {signInButton}
-        <Board images={this.state.data} onUpdate={this.updateImage} />
+        <Board images={this.state.data} onDelete={this.deleteImage} onUpdate={this.updateImage} />
       </div>
     );
   }

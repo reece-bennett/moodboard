@@ -4,12 +4,19 @@ import "./EditForm.css";
 
 export default class EditForm extends React.Component {
   state = {
+    deleteOpen: false,
     description: this.props.image.description,
     sourceUrl: this.props.image.sourceUrl
   };
 
   handleChange = event => {
     this.setState({ [event.target.name]: event.target.value });
+  };
+
+  handleDelete = event => {
+    const { image, onDelete } = this.props;
+    event.preventDefault();
+    onDelete(image._id);
   };
 
   handleSubmit = event => {
@@ -23,17 +30,25 @@ export default class EditForm extends React.Component {
         changes[key] = value;
       }
     }
-    
+
     if (Object.keys(changes).length !== 0) {
       onUpdate(image._id, changes);
     }
   };
 
   render() {
-    const { onCancel, onDelete } = this.props;
-    const { description, sourceUrl } = this.state;
+    const { onCancel } = this.props;
+    const { deleteOpen, description, sourceUrl } = this.state;
 
-    return (
+    return deleteOpen ? (
+      <div className="editForm">
+        <h2>Are you sure?</h2>
+        <div>
+          <button onClick={this.handleDelete}>Delete</button>
+          <button onClick={() => this.setState({ deleteOpen: false })}>Cancel</button>
+        </div>
+      </div>
+    ) : (
       <form className="editForm" onSubmit={this.handleSubmit}>
         <h2>Edit Image</h2>
         <label>
@@ -63,7 +78,11 @@ export default class EditForm extends React.Component {
           <button type="button" onClick={onCancel}>
             Close
           </button>
-          <button type="button" onClick={onDelete} style={{ float: "right" }}>
+          <button
+            type="button"
+            onClick={() => this.setState({ deleteOpen: true })}
+            style={{ float: "right" }}
+          >
             Delete
           </button>
         </div>
