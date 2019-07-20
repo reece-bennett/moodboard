@@ -24,7 +24,11 @@ export default class Board extends React.Component {
     });
   };
 
-  closeLightbox = () => {
+  closeLightbox = event => {
+    // When the edit modal closes, focus is on the body. So don't close if the
+    // edit modal has just been closed.
+    if (event.target === document.body) return;
+
     this.setState({
       currentIndex: 0,
       lightboxIsOpen: false
