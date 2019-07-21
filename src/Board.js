@@ -75,16 +75,20 @@ export default class Board extends React.Component {
     const { onUpdate } = this.props;
     onUpdate(id, changes)
       .then(() => this.closeEdit())
-      .catch(err => console.error(err));
+      .catch(err => console.error(`Could not update: ${err.message}`));
   };
 
   render() {
-    const { images } = this.props;
+    const { images, user } = this.props;
     const { currentIndex, editIsOpen, lightboxIsOpen } = this.state;
 
     if (images.length === 0) {
+      // TODO: Return no images message
       return null;
     }
+
+    const currentImage = images[currentIndex];
+    const userIsOwner = (user && user.id) === currentImage.author;
 
     const galleryImages = [];
     const lightboxImages = [];
@@ -129,7 +133,13 @@ export default class Board extends React.Component {
                       <div className="header">
                         <span />
                         <span>
-                          <button className="headerButton" onClick={this.openEdit} type="button">
+                          <button
+                            className="headerButton"
+                            onClick={this.openEdit}
+                            type="button"
+                            disabled={!userIsOwner}
+                            title={!userIsOwner ? "Not authorised" : null}
+                          >
                             <Edit />
                           </button>
                           <button className="headerButton" onClick={toggleFullscreen} type="button">
@@ -188,5 +198,12 @@ export default class Board extends React.Component {
 Board.propTypes = {
   images: PropTypes.array.isRequired,
   onDelete: PropTypes.func.isRequired,
-  onUpdate: PropTypes.func.isRequired
+  onUpdate: PropTypes.func.isRequired,
+  user: PropTypes.shape({
+    familyName: PropTypes.string,
+    givenName: PropTypes.string,
+    id: PropTypes.string,
+    idToken: PropTypes.string,
+    imageUrl: PropTypes.string
+  })
 };

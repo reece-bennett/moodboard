@@ -82,7 +82,9 @@ export default class App extends React.Component {
   };
 
   render() {
-    const signInButton = this.state.user ? (
+    const { data, user } = this.state;
+
+    const signInButton = user ? (
       <GoogleLogout onLogoutSuccess={this.onSignOut} buttonText="Sign out" />
     ) : (
       <GoogleLogin
@@ -98,7 +100,7 @@ export default class App extends React.Component {
       <div className="App">
         <h1>Moodboard</h1>
         {signInButton}
-        <Board images={this.state.data} onDelete={this.deleteImage} onUpdate={this.updateImage} />
+        <Board images={data} onDelete={this.deleteImage} onUpdate={this.updateImage} user={user} />
       </div>
     );
   }

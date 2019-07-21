@@ -14,7 +14,7 @@
 - [ ] Form for adding new links
 - [x] Edit button in lightbox, might need to re-make the header as seems like there is no easy way to just add another control alongside the other buttons
 - [ ] BUG: Carousel looses keyboard focus after closing the edit modal
-- [ ] Inform user if they are not authorised to edit an image
+- [x] Inform user if they are not authorised to edit an image
 - [ ] Author and date information when hovering over the description in lightbox
 - [ ] Allow linking to a single image on the board, and change URL as user navigates
 
