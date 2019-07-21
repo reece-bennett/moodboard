@@ -8,6 +8,7 @@ const imageSchema = new mongoose.Schema(
     originalUrl: { type: String, required: true },
     sourceUrl: { type: String, required: true },
     author: { type: String, required: true },
+    authorName: { type: String, required: true },
     description: { type: String, default: "" }
   },
   { timestamps: true }

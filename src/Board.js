@@ -121,7 +121,13 @@ export default class Board extends React.Component {
                     const { caption, hostname, sourceUrl } = currentView;
                     return (
                       <span className="imageCaption">
-                        <span>{caption}</span>
+                        <span
+                          title={`${currentImage.authorName} @ ${
+                            new Date(currentImage.createdAt).toString().split(" GMT")[0]
+                          }`}
+                        >
+                          {caption}
+                        </span>
                         <a href={sourceUrl}>{hostname}</a>
                       </span>
                     );

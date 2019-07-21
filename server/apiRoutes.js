@@ -72,7 +72,8 @@ router.post("/", loggedIn, async (req, res) => {
       description,
       width: dimensions.width,
       height: dimensions.height,
-      author: req.user
+      author: req.user,
+      authorName: req.profile.name
     });
     const result = await image.save();
     res.json(result)
