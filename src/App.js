@@ -28,6 +28,12 @@ export default class App extends React.Component {
     return body;
   };
 
+  componentDidMount = () => {
+    this.callBackend("GET", "/images", null)
+      .then(data => this.setState({ data }))
+      .catch(err => console.error(err));
+  };
+
   onSignIn = googleUser => {
     const profile = googleUser.getBasicProfile();
     const user = {
@@ -39,10 +45,6 @@ export default class App extends React.Component {
     };
     this.setState({ user });
     console.log(`${user.givenName} ${user.familyName} (ID:${user.id}) signed in`);
-
-    this.callBackend("GET", "/images", null)
-      .then(data => this.setState({ data }))
-      .catch(err => console.error(err));
   };
 
   onSignOut = () => {
