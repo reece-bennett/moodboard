@@ -1,6 +1,6 @@
 // Load config variables from .env
 require("dotenv").config();
-const { DBUSER, DBPASSWORD, DBURL, CLIENT_ID, PORT } = process.env;
+const { DB_USER, DB_PASSWORD, DB_URL, CLIENT_ID, PORT } = process.env;
 
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -10,8 +10,8 @@ const mongoose = require("mongoose");
 const apiRoutes = require("./apiRoutes");
 
 // Connect to mongoose
-const dbUrl = `mongodb+srv://${DBUSER}:${DBPASSWORD}@${DBURL}`;
-console.log(`Making connection to the database at '${dbUrl}'...`);
+const dbUrl = `mongodb+srv://${DB_USER}:${DB_PASSWORD}@${DB_URL}`;
+console.log(`Making connection to the database at '${DB_URL}' as user '${DB_USER}'`);
 mongoose.connect(dbUrl, { useNewUrlParser: true });
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "Connection error:"));

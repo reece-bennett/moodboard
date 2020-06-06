@@ -3,9 +3,9 @@
 A `.env` file must be present, containing details for a MongoDB instance and Google OAuth client:
 
 ```env
-DBURL=example.com
-DBUSER=user
-DBPASSWORD=password
+DB_URL=cluster-abc.mongodb.net/database
+DB_USER=user
+DB_PASSWORD=password
 CLIENT_ID=abc123.apps.googleusercontent.com
 ```
 
